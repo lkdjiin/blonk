@@ -26,5 +26,19 @@ print_string:
 .done:
   ret
 
+; ----------------------------------------------------------------------
+; Table des partitions
+times 446-($-$$) nop
+db 0x80    ; Partition active
+db 0       ; Starting head
+db 2       ; Starting sector
+db 0       ; Starting cylinder
+db 0x20    ; System ID
+db 1       ; Ending head
+db 0x10    ; Ending sector
+db 0x10    ; Ending cylinder
+dd 1       ; LBA ?
+dd 131072  ; Total de secteurs (64 MB)
+
 times 510-($-$$) db 0
 dw 0xaa55

@@ -36,9 +36,15 @@ La liste qui suit est l'objectif à atteindre. On en est encore loin.
 
 ## Release(s)
 
+### Build
+
+    nasm message.nasm -f bin -o message
+    nasm boot.nasm -f bin -o boot
+    cat boot message > kernel
+
 ### Dans l'émulateur
 
-À venir.
+    qemu-system-i386 -hda kernel
 
 ### Sur un ordinateur physique
 

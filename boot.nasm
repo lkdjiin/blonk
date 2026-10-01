@@ -1,30 +1,41 @@
-org 0x7c00
+BOOT_ADDRESS  equ 0x7c00
+SHELL_ADDRESS equ 0x9000
+DRIVE_NUMBER  equ 0x80
+
+org BOOT_ADDRESS
 bits 16
 
 xor ax, ax
 mov ds, ax
 mov es, ax
 mov ss, ax
-mov sp, 0x7c00
+mov sp, BOOT_ADDRESS
 cld
 
-mov si, welcome
-call print_string
+; Réinitialisation du disque dur
+drive_reset:
+  mov ah, 0
+  mov dl, DRIVE_NUMBER
+  int 0x13
+  jc drive_reset
 
-jmp $
+; Charger le shell à l'adresse 0x9000.
+; Il est situé dans le second secteur du disque dur.
+mov ax, SHELL_ADDRESS / 16
+mov es, ax
+xor bx, bx
+mov ah, 0x02
+mov al, 1
+mov ch, 0
+mov cl, 2
+mov dh, 0
+mov dl, DRIVE_NUMBER
+int 0x13
+jc drive_reset
 
-welcome db 'Welcome and bienvenue', 0x0d, 0x0a, 0
 
-print_string:
-  lodsb
-  or al, al
-  jz .done
-  mov ah, 0x0e
-  mov bx, 0x0007
-  int 0x10
-  jmp print_string
-.done:
-  ret
+; Maintenant que le shell est chargé en mémoire, on y va.
+jmp 0:SHELL_ADDRESS
 
 ; ----------------------------------------------------------------------
 ; Table des partitions

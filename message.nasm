@@ -12,7 +12,7 @@ call print_string
 
 jmp $
 
-message db 'BLONK! 0.0.3', 0
+message db 'BLONK! 0.0.4', 0
 
 print_string:
   lodsb

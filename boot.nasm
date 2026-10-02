@@ -1,6 +1,6 @@
+BOOT_DRIVE    equ 0x500
 BOOT_ADDRESS  equ 0x7c00
 SHELL_ADDRESS equ 0x9000
-DRIVE_NUMBER  equ 0x80
 
 org BOOT_ADDRESS
 bits 16
@@ -10,12 +10,13 @@ mov ds, ax
 mov es, ax
 mov ss, ax
 mov sp, BOOT_ADDRESS
+mov byte [BOOT_DRIVE], dl
 cld
 
 ; Réinitialisation du disque dur
 drive_reset:
   mov ah, 0
-  mov dl, DRIVE_NUMBER
+  mov dl, [BOOT_DRIVE]
   int 0x13
   jc drive_reset
 
@@ -29,7 +30,7 @@ mov al, 1
 mov ch, 0
 mov cl, 2
 mov dh, 0
-mov dl, DRIVE_NUMBER
+mov dl, [BOOT_DRIVE]
 int 0x13
 jc drive_reset
 

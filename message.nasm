@@ -7,22 +7,20 @@ mov es, ax
 mov ss, ax
 mov sp, 0x7c00
 
-mov si, message
-call print_string
+mov ebx, 0xb8000
+mov byte [ebx], 3
+inc ebx
+mov byte [ebx], 0x0f
+inc ebx
+mov byte [ebx], 66
+inc ebx
+mov byte [ebx], 0xe4
+inc ebx
+mov byte [ebx], 130
+inc ebx
+mov byte [ebx], 0x0f
 
-jmp $
-
-message db 'BLONK! 0.0.4', 0
-
-print_string:
-  lodsb
-  or al, al
-  jz .done
-  mov ah, 0x0e
-  mov bx, 0x0007
-  int 0x10
-  jmp print_string
-.done:
-  ret
+cli
+hlt
 
 times 512-($-$$) db 0
